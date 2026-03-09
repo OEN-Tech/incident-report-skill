@@ -1,97 +1,97 @@
 # 資安事件通報報告產生器 — Incident Report Generator
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) / Openclaw skill that generates cybersecurity incident reports in the official Taiwan government format (**個人資料侵害事故通報與紀錄表**).
+一個 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) / [Openclaw](https://openclaw.ai) skill，自動產生符合台灣政府格式的資安事件報告（**個人資料侵害事故通報與紀錄表**）`.docx` 文件。
 
-Produces `.docx` files matching the notification format required by Taiwan's Ministry of Digital Affairs (數位發展部) under the Personal Data Protection Act (個人資料保護法).
+依據《個人資料保護法》規範，產出符合數位發展部（數位產業署）要求的通報格式。
 
-## What It Generates
+## 產出內容
 
-The report consists of two parts:
+報告包含兩部分：
 
-### Part 1: Government Notification Form
+### 第一部分：政府通報表
 
-A structured form table (個人資料侵害事故通報與紀錄表) with all required fields:
-- Company and agency information
-- Reporter details
-- Incident classification (竊取/洩漏/竄改/毀損/滅失/其他)
-- Records affected count
-- Cause summary, damage assessment, countermeasures
-- 72-hour notification compliance
+結構化表格（個人資料侵害事故通報與紀錄表），涵蓋所有必填欄位：
+- 事業名稱與通報機關
+- 通報人資訊
+- 事件發生種類（竊取／洩漏／竄改／毀損／滅失／其他）
+- 個資侵害總筆數
+- 發生原因及事件摘要、損害狀況、因應措施
+- 72 小時通報合規狀態
 
-### Part 2: Detailed Appendix
+### 第二部分：附錄說明文件
 
-A comprehensive explanation document with 7 sections:
-1. Event summary
-2. Company relationship to the incident
-3. Incident timeline
-4. System security architecture (infrastructure, encryption, API security, monitoring, IDS/IPS, access control)
-5. System audit report with results table
-6. Conclusions
-7. Follow-up measures
+完整的事件說明文件，包含 7 個章節：
+1. 事件摘要
+2. 與本公司之關聯
+3. 事件時間軸
+4. 系統安全架構說明（基礎架構、加密與金鑰管理、API 安全、監控與威脅偵測、入侵偵測與防禦、存取控制）
+5. 系統排查報告（含排查結果表格）
+6. 結論
+7. 後續措施
 
-## Installation as Claude Code Skill
+## 安裝為 Claude Code Skill
 
 ```bash
-# Clone to your Claude Code skills directory
+# Clone 到 Claude Code skills 目錄
 git clone https://github.com/Oen-Tech/incident-report-skill.git \
   ~/.claude/skills/incident-report
 ```
 
-Or symlink if you prefer:
+或用 symlink：
 ```bash
 git clone https://github.com/Oen-Tech/incident-report-skill.git ~/Code/incident-report-skill
 ln -s ~/Code/incident-report-skill ~/.claude/skills/incident-report
 ```
 
-### Requirements
+### 相依套件
 
 ```bash
 pip install python-docx
 ```
 
-## Usage
+## 使用方式
 
-### With Claude Code
+### 搭配 Claude Code
 
-Simply ask Claude to generate an incident report:
-- "Generate a cybersecurity incident report"
-- "建立資安事件通報表"
-- "Create an incident report for the data breach"
+直接請 Claude 產生報告：
+- 「建立資安事件通報表」
+- 「產生個資事故通報報告」
+- 「Generate a cybersecurity incident report」
 
-Claude will use the skill to gather details and generate the `.docx` file.
+Claude 會透過 skill 蒐集相關資訊後自動產生 `.docx` 文件。
 
-### Standalone CLI
+### 命令列（CLI）
 
 ```bash
-# With a config file
+# 使用設定檔
 python3 generate.py --output report.docx --config my-config.json
 
-# With example defaults
+# 使用預設範例值
 python3 generate.py --output report.docx
 ```
 
-### As a Python Library
+### 作為 Python Library
 
 ```python
 from generate import generate_report
 
 config = {
-    "company_name": "My Company",
+    "company_name": "某某科技股份有限公司",
     "incident_date": "2026-03-07",
     "reporter": {
-        "name": "Jane Smith",
-        "title": "CISO",
-        "email": "security@mycompany.com"
+        "name": "王小明",
+        "title": "資安長",
+        "email": "security@example.com"
     },
     "appendix": {
-        "title": "Data Breach — Incident Report",
+        "title": "資料外洩事件 — 事件報告",
         "sections": {
-            "summary": "Description of what happened...",
+            "summary": "事件經過描述...",
             "timeline": [
-                ["2026/03/07", "Incident discovered"],
-                ["2026/03/07", "Response team activated"]
+                ["2026/03/07", "發現事件"],
+                ["2026/03/07", "啟動應變團隊"]
             ],
-            # ... more sections
+            # ... 更多章節
         }
     }
 }
@@ -99,30 +99,30 @@ config = {
 generate_report(config, "output.docx")
 ```
 
-## Configuration
+## 設定
 
-All fields are optional — sensible defaults are provided. See `example-config.json` for a complete example or `SKILL.md` for the full schema documentation.
+所有欄位皆為選填，預設值已提供。完整範例請參考 `example-config.json`，完整 schema 說明請參考 `SKILL.md`。
 
-### Key Config Fields
+### 主要設定欄位
 
-| Field | Description | Default |
-|-------|-------------|---------|
-| `company_name` | Your company name | "ACME Technology Co., Ltd." |
-| `receiving_agency` | Government agency | "數位發展部數位產業署" |
-| `report_date` | Report date (YYYY-MM-DD) | Today |
-| `reporter` | Reporter contact info object | Example values |
-| `incident_date` | When the incident occurred | Empty |
-| `incident_type` | 竊取/洩漏/竄改/毀損/滅失/其他 | "其他" |
-| `appendix.sections` | Detailed report content | See SKILL.md |
+| 欄位 | 說明 | 預設值 |
+|------|------|--------|
+| `company_name` | 公司名稱 | "ACME Technology Co., Ltd." |
+| `receiving_agency` | 通報機關 | "數位發展部數位產業署" |
+| `report_date` | 通報日期 (YYYY-MM-DD) | 當天日期 |
+| `reporter` | 通報人聯絡資訊 | 範例值 |
+| `incident_date` | 事件發生日期 | 空白 |
+| `incident_type` | 竊取／洩漏／竄改／毀損／滅失／其他 | "其他" |
+| `appendix.sections` | 附錄各章節內容 | 參考 SKILL.md |
 
-## Document Format
+## 文件格式
 
-- **Page size**: A4 (21 × 29.7 cm)
-- **Margins**: Top 1.45cm, Bottom 2.45cm, Left 1.99cm, Right 1.95cm
-- **Form font**: 楷體 (Kai), 14pt
-- **Body font**: Calibri, ~11pt
-- **Tables**: Bordered, with Kai font
+- **紙張大小**：A4（21 × 29.7 cm）
+- **邊界**：上 1.45cm、下 2.45cm、左 1.99cm、右 1.95cm
+- **表格字體**：楷體（Kai），14pt
+- **內文字體**：Calibri，約 11pt
+- **表格**：全框線，楷體
 
-## License
+## 授權
 
 MIT
