@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.docx
+!example-config.json
+.DS_Store
