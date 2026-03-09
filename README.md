@@ -1,6 +1,6 @@
 # 資安事件通報報告產生器 — Incident Report Generator
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill that generates cybersecurity incident reports in the official Taiwan government format (**個人資料侵害事故通報與紀錄表**).
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) / Openclaw skill that generates cybersecurity incident reports in the official Taiwan government format (**個人資料侵害事故通報與紀錄表**).
 
 Produces `.docx` files matching the notification format required by Taiwan's Ministry of Digital Affairs (數位發展部) under the Personal Data Protection Act (個人資料保護法).
 
